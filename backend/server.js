@@ -1,15 +1,13 @@
-const express = require('express');
-const app = express();
+require('dotenv').config();
+const app = require('./app');
+
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.json());
-
-// Sample route
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+  
+  // Initialize Socket.io if needed
+//   const io = initSocket(server);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+module.exports = { app, server };
