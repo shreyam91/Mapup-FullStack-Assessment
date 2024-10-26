@@ -1,13 +1,12 @@
-// middlewares/roleMiddleware.js
 const Role = require('../models/Role');
 
 const authorize = (permission) => {
   return async (req, res, next) => {
-    const user = req.user; // Assuming user is attached to the request after authentication
+    const user = req.user; // User object attached by authMiddleware
 
     try {
-      const role = await Role.findById(user.roleId); // Ensure this is correct
-      if (!role || !role.permissions[permission]) {
+      const role = await Role.findById(user.roleId); // Adjust to your schema if needed
+      if (!role || !role.permissions.includes(permission)) {
         return res.status(403).json({ message: 'Access denied.' });
       }
       next();
@@ -18,4 +17,4 @@ const authorize = (permission) => {
   };
 };
 
-module.exports = authorize; // Correct export
+module.exports = authorize;
