@@ -35,7 +35,10 @@ router.post('/upload/weather', authMiddleware, upload.single('file'), async (req
     .on('end', async () => {
       try {
         // Validate and process the weather data before saving to MongoDB
-        await dataController.bulkInsertWeatherData(results);
+        // await dataController.bulkInsertWeatherData(results);
+
+        // Pass the file path as a single string, not the parsed content
+        await dataController.bulkInsertWeatherData(req.file.path);
         
         // Clean up the uploaded file
         fs.unlinkSync(req.file.path);

@@ -49,15 +49,25 @@ app.post('/upload/weather', upload.single('file'), async (req, res) => {
   const results = [];
 
   // Parse the weather CSV file
-  
   fs.createReadStream(req.file.path)
     .pipe(csv())
-    .on('data', (data) => results.push(data))
+    .on('data', (row) => {
+      // Filter only rows containing weather data, ignoring metadata
+      if (row.date && row.max_temperature && row.precipitation && row.max_windspeed && row.max_wind_gusts) {
+        results.push({
+          date: row.date,
+          max_temperature: parseFloat(row.max_temperature),
+          precipitation: parseFloat(row.precipitation),
+          max_windspeed: parseFloat(row.max_windspeed),
+          max_wind_gusts: parseFloat(row.max_wind_gusts),
+        });
+      }
+    })
     .on('end', async () => {
       try {
-        // Add a job to the queue with parsed results
-        await weatherDataQueue.add({ results });
-        
+        // Add a job to the queue with the filtered results
+        await weatherDataQueue.add({ data: results });
+
         // Clean up the uploaded file
         fs.unlinkSync(req.file.path);
 
