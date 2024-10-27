@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Define the role schema
 const roleSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -8,12 +7,11 @@ const roleSchema = new mongoose.Schema({
     required: true,
   },
   permissions: {
-    type: Object, // Use Object for JSON-like structure
-    default: {}, // Optional: Set default to an empty object
+    type: Object, 
+    default: {}, 
   },
 });
 
-// Create and export the Role model
 const Role = mongoose.model('Role', roleSchema);
 
 module.exports = Role;

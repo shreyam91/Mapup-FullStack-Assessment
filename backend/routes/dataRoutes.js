@@ -7,7 +7,6 @@ const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
 
-// Initialize multer for file uploads
 const upload = multer({ dest: 'uploads/' });
 
 // Admin routes
@@ -34,13 +33,8 @@ router.post('/upload/weather', authMiddleware, upload.single('file'), async (req
     .on('data', (data) => results.push(data))
     .on('end', async () => {
       try {
-        // Validate and process the weather data before saving to MongoDB
-        // await dataController.bulkInsertWeatherData(results);
-
-        // Pass the file path as a single string, not the parsed content
         await dataController.bulkInsertWeatherData(req.file.path);
         
-        // Clean up the uploaded file
         fs.unlinkSync(req.file.path);
 
         res.status(201).json({ message: 'Weather data uploaded successfully', data: results });
@@ -69,15 +63,13 @@ router.post('/upload', authMiddleware, upload.single('file'), async (req, res) =
     .on('data', (data) => results.push(data))
     .on('end', async () => {
       try {
-        // Validate and process the data before saving to MongoDB
-        await dataController.bulkInsertData(results); // Ensure this is implemented in your dataController
-        
-        // Clean up the uploaded file
+        await dataController.bulkInsertData(results); 
+
         fs.unlinkSync(req.file.path);
 
         res.status(201).json({ message: 'Data uploaded successfully', data: results });
       } catch (error) {
-        console.error('Error saving data:', error); // Log the error for debugging
+        console.error('Error saving data:', error); 
         res.status(500).json({ message: 'Error saving data', error: error.message });
       }
     })
@@ -85,6 +77,17 @@ router.post('/upload', authMiddleware, upload.single('file'), async (req, res) =
       console.error('Error parsing general CSV:', error);
       res.status(500).json({ message: 'Error processing general CSV file', error: error.message });
     });
+});
+
+// Route to fetch all weather data
+router.get('/weather', authMiddleware, async (req, res) => {
+  try {
+    const weatherData = await dataController.getWeatherData(); 
+    res.json(weatherData); 
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    res.status(500).json({ message: 'Error fetching weather data', error: error.message });
+  }
 });
 
 module.exports = router;

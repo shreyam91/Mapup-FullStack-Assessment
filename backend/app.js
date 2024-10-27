@@ -1,4 +1,4 @@
-require('dotenv').config(); // Load environment variables
+require('dotenv').config(); 
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -7,16 +7,15 @@ const cors = require('cors');
 const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
-const weatherDataQueue = require('./queues/jobQueue'); // Import job queue
-const authRoutes = require('./routes/authRoutes'); // Import authentication routes
-const dataRoutes = require('./routes/dataRoutes'); // Import data routes
+const weatherDataQueue = require('./queues/jobQueue'); 
+const authRoutes = require('./routes/authRoutes'); 
+const dataRoutes = require('./routes/dataRoutes'); 
 
-// Initialize Express app
 const app = express();
-app.use(cors()); // Enable CORS for all requests
-app.use(bodyParser.json()); // For parsing application/json
+app.use(cors()); 
+app.use(bodyParser.json()); 
 
-// Connect to MongoDB
+// Connection to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
@@ -28,7 +27,7 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again later.',
 });
 
-app.use(limiter); // Apply rate limiting to all requests
+app.use(limiter); 
 
 // Middleware to handle JSON requests
 app.use(express.json());
@@ -36,9 +35,8 @@ app.use(express.json());
 // Initialize multer for file uploads
 const upload = multer({ dest: 'uploads/' });
 
-// Define routes
-app.use('/api/auth', authRoutes); // Authentication routes
-app.use('/api/data', dataRoutes); // Data routes
+app.use('/api/auth', authRoutes); 
+app.use('/api/data', dataRoutes); 
 
 // Route to upload weather CSV file
 app.post('/upload/weather', upload.single('file'), async (req, res) => {
@@ -83,16 +81,14 @@ app.post('/upload/weather', upload.single('file'), async (req, res) => {
     });
 });
 
-// Root route to avoid "Cannot GET /" error
 app.get('/', (req, res) => {
-  res.send('Welcome to the API!'); // Simple welcome message
+  res.send('Welcome to the API!'); 
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log the error stack
-  res.status(err.status || 500).json({ message: err.message || 'Something broke!' }); // Send error response
+  console.error(err.stack); 
+  res.status(err.status || 500).json({ message: err.message || 'Something broke!' }); 
 });
 
-// Export the Express app
 module.exports = app;

@@ -1,4 +1,3 @@
-// jobQueue.js
 const Queue = require('bull');
 const mongoose = require('mongoose');
 const Weather = require('../models/Weather');
@@ -16,7 +15,6 @@ const weatherDataQueue = new Queue('weatherData', {
 weatherDataQueue.process(async (job) => {
   console.log('Processing job:', job.data);
 
-  // Implement the logic for saving data to MongoDB
   const results = job.data.results;
 
   try {
@@ -24,11 +22,11 @@ weatherDataQueue.process(async (job) => {
     console.log('Weather data saved to MongoDB');
   } catch (error) {
     console.error('Error saving weather data:', error);
-    throw new Error(error.message); // Rethrow to mark job as failed
+    throw new Error(error.message); 
   }
 });
 
-// Connect to MongoDB
+// Connection to MongoDB
 const connectToMongoDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
@@ -42,7 +40,6 @@ const connectToMongoDB = async () => {
   }
 };
 
-// Call the MongoDB connection function
 connectToMongoDB();
 
 module.exports = weatherDataQueue;

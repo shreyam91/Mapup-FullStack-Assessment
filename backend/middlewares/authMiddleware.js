@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Import User model
+const User = require('../models/User'); 
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
+  const token = req.headers['authorization']?.split(' ')[1]; 
 
   if (!token) {
     return res.status(403).json({ message: 'No token provided' });
@@ -19,9 +19,9 @@ const authMiddleware = async (req, res, next) => {
         return res.status(401).json({ message: 'User not found' });
       }
 
-      req.user = user; // Attach the entire user object
-      req.userId = decoded.userId; // Attach user ID
-      req.userRole = decoded.role; // Attach user role
+      req.user = user; 
+      req.userId = decoded.userId; 
+      req.userRole = decoded.role; 
 
       next();
     } catch (error) {

@@ -2,10 +2,10 @@ const Role = require('../models/Role');
 
 const authorize = (permission) => {
   return async (req, res, next) => {
-    const user = req.user; // User object attached by authMiddleware
+    const user = req.user; 
 
     try {
-      const role = await Role.findById(user.roleId); // Adjust to your schema if needed
+      const role = await Role.findById(user.roleId); 
       if (!role || !role.permissions.includes(permission)) {
         return res.status(403).json({ message: 'Access denied.' });
       }

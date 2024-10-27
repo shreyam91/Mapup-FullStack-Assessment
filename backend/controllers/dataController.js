@@ -1,11 +1,10 @@
-// Required Imports
 const fs = require('fs');
 const csv = require('csv-parser');
-const Weather = require('../models/Weather'); // Ensure this model is correctly defined
-const Data = require('../models/Data'); // Assuming you have this model, adjust as necessary
-const User = require('../models/User'); // Assuming you have this model, adjust as necessary
+const Weather = require('../models/Weather'); 
+const Data = require('../models/Data'); 
+const User = require('../models/User'); 
 
-// Validate CSV data for weather
+// Validating CSV data for weather
 const validateWeatherData = (data) => {
   const errors = [];
   data.forEach((item, index) => {
@@ -19,30 +18,27 @@ const validateWeatherData = (data) => {
   return errors;
 };
 
-// Bulk insert weather data with validation
+// Bulk insert weather data
 exports.bulkInsertWeatherData = async (filePath) => {
   try {
-    const weatherData = []; // Array to hold the parsed weather data
-    let isWeatherDataSection = false; // Flag to indicate if we are in the weather data section
+    const weatherData = []; 
+    let isWeatherDataSection = false; 
 
     // Parse the CSV file directly
     await new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
         .on('data', (row) => {
-          console.log("Row Data:", row); // Log the row data being processed
+          console.log("Row Data:", row); 
 
-          // Check if we're in the weather data section by looking for headers
           if (row.date) {
-            isWeatherDataSection = true; // Entering weather data section
+            isWeatherDataSection = true;
           } else if (row.latitude) {
-            isWeatherDataSection = false; // In the location data section
-            return; // Skip processing for location data
+            isWeatherDataSection = false; 
+            return; 
           }
 
-          // Only add rows that contain weather data if we are in the weather data section
           if (isWeatherDataSection) {
-            // Ensure that all required fields are present before pushing to the array
             if (row.date && row.max_temperature && row.precipitation && row.max_windspeed && row.max_wind_gusts) {
               weatherData.push({
                 date: row.date,
@@ -54,8 +50,8 @@ exports.bulkInsertWeatherData = async (filePath) => {
             }
           }
         })
-        .on('end', resolve) // Resolve the promise when parsing is complete
-        .on('error', reject); // Reject the promise on error
+        .on('end', resolve) 
+        .on('error', reject); 
     });
 
     // Check for empty data
@@ -63,7 +59,7 @@ exports.bulkInsertWeatherData = async (filePath) => {
       throw new Error('No valid weather data found in the CSV file.');
     }
 
-    console.log("Filtered Weather Data:", weatherData); // Check structure in console
+    console.log("Filtered Weather Data:", weatherData); 
 
     // Validate the weather data
     const validationErrors = validateWeatherData(weatherData);
@@ -76,7 +72,7 @@ exports.bulkInsertWeatherData = async (filePath) => {
     console.log('Data inserted successfully');
   } catch (error) {
     console.error('Error saving weather data:', error.message);
-    throw error; // Rethrow to handle in the route
+    throw error; 
   } finally {
     // Delete the file only if it exists
     if (filePath) {
@@ -86,9 +82,6 @@ exports.bulkInsertWeatherData = async (filePath) => {
     }
   }
 };
-
-
-
 
 // Add Data (Admin route)
 exports.addData = async (req, res) => {
@@ -162,5 +155,16 @@ exports.bulkInsertData = async (data) => {
   } catch (error) {
     console.error('Error saving data:', error.message);
     throw error;
+  }
+};
+
+// Fetch Weather Data
+exports.getWeatherData = async (req, res) => {
+  try {
+    const weatherData = await Weather.find();
+    res.status(200).json({ data: weatherData });
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    res.status(500).json({ message: 'Error fetching weather data', error: error.message });
   }
 };

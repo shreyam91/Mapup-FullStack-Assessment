@@ -1,69 +1,4 @@
-// "use client";
-
-// import React, { useEffect, useState } from 'react';
-
-// interface WeatherData {
-//   date: string;
-//   max_temperature: number;
-//   precipitation: number;
-//   max_windspeed: number;
-//   max_wind_gusts: number;
-// }
-
-// export default function Home() {
-//   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const fetchWeatherData = async () => {
-//       try {
-//         const response = await fetch("http://localhost:8000/api/data/weather", {
-//           headers: {
-//             Authorization: `Bearer $eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzFkMGY0ZGNiMTUzMWVhY2ZiZTMxMmYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MzAwMzIzMDYsImV4cCI6MTczMDAzNTkwNn0.NuEo64agVx_Xabt7RBYYwaVbTElrsA6Niw4S9n_uLnI`, // replace with your actual token
-//           },
-//         });
-
-//         if (!response.ok) {
-//           throw new Error("Failed to fetch weather data");
-//         }
-
-//         const data = await response.json();
-//         setWeatherData(data);
-//       } catch (err: any) {
-//         setError(err.message);
-//       }
-//     };
-
-//     fetchWeatherData();
-//   }, []);
-
-//   if (error) return <div>Error: {error}</div>;
-
-//   return (
-//     <div>
-//       <h1>Weather Data</h1>
-//       <ul>
-//         {weatherData.map((item, index) => (
-//           <li key={index}>
-//             <p>Date: {item.date}</p>
-//             <p>Max Temperature: {item.max_temperature}°C</p>
-//             <p>Precipitation: {item.precipitation} mm</p>
-//             <p>Max Windspeed: {item.max_windspeed} km/h</p>
-//             <p>Max Wind Gusts: {item.max_wind_gusts} km/h</p>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-"use client";
-import { Button } from "@/components/ui/button";
-
-
-export default function Page() {
-  return (
-    <main className="bg-gradient-to-r from-blue-300 to-orange-200 h-full min-h-screen">
+<main className="bg-gradient-to-r from-blue-300 to-orange-200 h-full min-h-screen">
       <div className="container relative m-0 mx-auto py-10 md:px-10">
         <div className="flex items-center justify-center lg:justify-between">
           <h1 className="text-xl hidden lg:flex font-medium text-gray-950 md:text-2xl">
@@ -95,7 +30,7 @@ export default function Page() {
               it in a more interactive way.
             </h2>
             <div className="mt-12 flex flex-col gap-4">
-              <Button>Get Started</Button>
+              <Button onClick={handleGetStarted}>Get Started</Button>
             </div>
           </div>
         </div>
@@ -113,5 +48,3 @@ export default function Page() {
         </div>
       </footer>
     </main>
-  );
-}
