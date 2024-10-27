@@ -1,8 +1,10 @@
+  This project is not completed yet. I am still working on it.
+
 # Real-Time Large Dataset Dashboard
 
 ## Overview
 
-Welcome to the Real-Time Large Dataset Dashboard project! This application visualizes large datasets in an interactive and engaging way, allowing users to gain insights from their data in real time. The project is built with **Next.js** for the frontend and utilizes **Node.js**, **Express**, and **MongoDB** for the backend, alongside **Redis** and **Bull** for task queuing.
+Welcome to the Real-Time Large Dataset Dashboard project! This application visualizes large datasets in an interactive and engaging way, allowing users to gain insights from their data in real-time. The project is built with **Next.js** for the frontend and utilizes **Node.js**, **Express**, and **MongoDB** for the backend, alongside **Redis** and **Bull** for task queue.
 
 ## Features
 
